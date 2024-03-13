@@ -6,46 +6,34 @@ pragma solidity >=0.7.0 <0.9.0;
  * @title Owner
  * @dev Set & change owner
  */
+//explain
+
 contract Owner {
-
+    //private variable of type address
     address private owner;
-
-    // event for EVM logging
+    //event fired when the owner changes
+    //The function receives 2 addresses (the old owner and the new owner) and saves an atom in the log
     event OwnerSet(address indexed oldOwner, address indexed newOwner);
-
-    // modifier to check if caller is owner
+    //A function that checks whether the caller of the function is the owner
     modifier isOwner() {
-        // If the first argument of 'require' evaluates to 'false', execution terminates and all
-        // changes to the state and to Ether balances are reverted.
-        // This used to consume all gas in old EVM versions, but not anymore.
-        // It is often a good idea to use 'require' to check if functions are called correctly.
-        // As a second argument, you can also provide an explanation about what went wrong.
         require(msg.sender == owner, "Caller is not owner");
         _;
     }
 
-    /**
-     * @dev Set contract deployer as owner
-     */
-    constructor() {
-        owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
-        emit OwnerSet(address(0), owner);
-    }
+    //The constructor is called once and initializes the owner to be the owner
+//This address represents address 0 - no previous owner
+    constructor(){
+        owner=msg.sender;
+        emit  OwnerSet(address(0), owner);
 
-    /**
-     * @dev Change owner
-     * @param newOwner address of new owner
-     */
-    function changeOwner(address newOwner) public isOwner {
+    }
+    //public function that receives a new address of an owner and replaces it with the old owner
+    function changeOwner (address newOwner) public  isOwner{
         emit OwnerSet(owner, newOwner);
-        owner = newOwner;
+        owner=newOwner;
     }
-
-    /**
-     * @dev Return owner address
-     * @return address of owner
-     */
-    function getOwner() external view returns (address) {
-        return owner;
+    //external- external: This specifies that the function can be called from outside the contract. 
+    function getOwner() external  view returns (address){
+        return  owner;
     }
 }
